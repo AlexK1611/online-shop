@@ -7,7 +7,15 @@ interface GuestLayoutProps {
 
 const GuestLayout: FC<GuestLayoutProps> = ({ children }) => {
     return (
-        <Box sx={{ height: '100vh' }}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }}
+        >
             {children}
         </Box>
     )
