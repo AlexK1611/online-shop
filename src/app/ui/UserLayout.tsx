@@ -7,7 +7,15 @@ interface UserLayoutProps {
 
 const UserLayout: FC<UserLayoutProps> = ({ children }) => {
     return (
-        <Box sx={{ height: '100vh' }}>
+        <Box sx={{ minHeight: '100vh' }}>
+            <Box
+                component='header'
+                sx={{
+                    height: '70px',
+                    background: 'lightblue'
+                }}
+            >
+            </Box>
             {children}
         </Box>
     )

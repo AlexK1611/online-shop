@@ -3,6 +3,8 @@ import { CssBaseline } from '@mui/material'
 import ProtectedGuestRoutes from 'app/components/ProtectedGuestRoutes'
 import ProtectedUserRoutes from 'app/components/ProtectedUserRoutes'
 import { authRouter } from 'auth/helpers/authRouter'
+import { productsRouter } from 'products/helpers/productsRouter'
+import { ProductsRoutes } from 'products/helpers/productsTypes'
 
 const App = () => {
     return (
@@ -19,9 +21,16 @@ const App = () => {
                     ))}
                 </Route>
                 <Route element={<ProtectedUserRoutes />}>
-                    <Route path='/' element={'User'} />
+                    {productsRouter.map(({ path, element: Element }) => (
+                        <Route
+                            key={`${path}-page`}
+                            path={path}
+                            element={<Element />}
+                        />
+                    ))}
+                    <Route path='/' element={<Navigate to={ProductsRoutes.AllProducts} />} />
                 </Route>
-                <Route path='*' element={<Navigate to='/' />} />
+                <Route path='*' element={<Navigate to={ProductsRoutes.AllProducts} />} />
             </Routes>
         </BrowserRouter>
     )
