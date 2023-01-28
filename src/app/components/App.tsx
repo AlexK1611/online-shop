@@ -2,8 +2,8 @@ import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
 import { CssBaseline } from '@mui/material'
 import ProtectedGuestRoutes from 'app/components/ProtectedGuestRoutes'
 import ProtectedUserRoutes from 'app/components/ProtectedUserRoutes'
-import { authRouter } from 'auth/helpers/authRouter'
-import { productsRouter } from 'products/helpers/productsRouter'
+import { AUTH_ROUTER } from 'auth/helpers/authConstants'
+import { PRODUCTS_ROUTER } from 'products/helpers/productsConstants'
 import { ProductsRoutes } from 'products/helpers/productsTypes'
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
             <CssBaseline />
             <Routes>
                 <Route element={<ProtectedGuestRoutes />}>
-                    {authRouter.map(({ path, element: Element }) => (
+                    {AUTH_ROUTER.map(({ path, element: Element }) => (
                         <Route
                             key={`${path}-page`}
                             path={path}
@@ -21,7 +21,7 @@ const App = () => {
                     ))}
                 </Route>
                 <Route element={<ProtectedUserRoutes />}>
-                    {productsRouter.map(({ path, element: Element }) => (
+                    {PRODUCTS_ROUTER.map(({ path, element: Element }) => (
                         <Route
                             key={`${path}-page`}
                             path={path}

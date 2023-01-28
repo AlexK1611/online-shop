@@ -5,7 +5,7 @@ import { UserCreds } from 'auth/helpers/authTypes'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { loginValidation } from 'auth/helpers/validationSchema'
+import { LOGIN_SCHEMA } from 'auth/helpers/authConstants'
 
 import { Box, Button } from '@mui/material'
 import LoginFormInput from 'auth/ui/LoginFormInput'
@@ -14,7 +14,7 @@ const Login = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     const { control, handleSubmit } = useForm<UserCreds>({
-        resolver: yupResolver(loginValidation),
+        resolver: yupResolver(LOGIN_SCHEMA),
         defaultValues: {
             username: '',
             password: ''
