@@ -9,7 +9,7 @@ import {
 } from 'products/store/productsSelectors'
 import { PRODUCTS_PER_PAGE } from 'products/helpers/productsConstants'
 
-import { Box, Grid, Pagination } from '@mui/material'
+import { Box, CircularProgress, Grid, Pagination } from '@mui/material'
 import ProductItem from 'products/ui/ProductItem'
 
 const AllProducts = () => {
@@ -18,9 +18,13 @@ const AllProducts = () => {
         setPage(value)
     }
 
+    const [isLoading, setLoading] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
     useEffect(() => {
-        dispatch(fetchAllProducts(page))
+        setLoading(true)
+        dispatch(fetchAllProducts(page)).then(() => {
+            setLoading(false)
+        })
     }, [dispatch, page])
 
     const allProducts = useSelector(selectAllProducts)
@@ -35,36 +39,40 @@ const AllProducts = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: '50px',
-                minHeight: 'calc(100vh - 70px)',
+                minHeight: 'calc(100vh - 50px)',
                 padding: '50px',
             }}
         >
-            {allProducts.length > 0 && (
+            {isLoading ? (
+                <CircularProgress size={200} color='primary' />
+            ) : (
                 <>
-                    <Grid container spacing={3}>
-                        {allProducts.map(product => (
-                            <Grid item xs={3} key={`product-${product.id}`}>
-                                <ProductItem
-                                    id={product.id}
-                                    title={product.title}
-                                    price={product.price}
-                                    thumbnail={product.thumbnail}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-
+                    {allProducts.length > 0 && (
+                        <Grid container spacing={3}>
+                            {allProducts.map(product => (
+                                <Grid item xs={3} key={`product-${product.id}`}>
+                                    <ProductItem
+                                        id={product.id}
+                                        title={product.title}
+                                        price={product.price}
+                                        thumbnail={product.thumbnail}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
+                    {productsTotal && (
+                        <Pagination
+                            count={productsTotal / PRODUCTS_PER_PAGE}
+                            page={page}
+                            onChange={handlePage}
+                            showFirstButton
+                            showLastButton
+                        />
+                    )}
                 </>
             )}
-            {productsTotal && (
-                <Pagination
-                    count={productsTotal / PRODUCTS_PER_PAGE}
-                    page={page}
-                    onChange={handlePage}
-                    showFirstButton
-                    showLastButton
-                />
-            )}
+
         </Box>
     )
 }

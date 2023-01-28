@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Product, ProductsRoutes } from 'products/helpers/productsTypes'
-import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material'
+import { Box, Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 type ProductItemProps = Pick<Product, 'id' | 'title' | 'price' | 'thumbnail'>
@@ -18,7 +18,8 @@ const ProductItem: FC<ProductItemProps> = ({ id, title, price, thumbnail }) => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '200px'
+                    height: '200px',
+                    backgroundColor: 'info.main'
                 }}
             >
                 <Box
@@ -32,13 +33,19 @@ const ProductItem: FC<ProductItemProps> = ({ id, title, price, thumbnail }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    gap: '20px',
+                    padding: '20px'
                 }}
             >
-                <Typography>{title}</Typography>
-                <Typography>{price}</Typography>
+                <Stack sx={{ width: '100%' }}>
+                    <Typography noWrap>{title}</Typography>
+                    <Typography>{`${price}$`}</Typography>
+                </Stack>
                 <CardActions>
-                    <Button onClick={goToItemPage}>Info</Button>
+                    <Button variant='contained' onClick={goToItemPage}>
+                        Info
+                    </Button>
                 </CardActions>
             </CardContent>
         </Card>
