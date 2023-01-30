@@ -1,7 +1,23 @@
 import { FC } from 'react'
-import { Product, ProductsRoutes } from 'products/helpers/productsTypes'
-import { Box, Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from 'app/store/store'
+import { addItemToCart } from 'cart/store/cartSlice'
+import { selectCartItems } from 'cart/store/cartSelector'
+
+import { Product, ProductsRoutes } from 'products/helpers/productsTypes'
+import {
+    Box,
+    Card,
+    CardActions,
+    CardContent,
+    IconButton,
+    Stack,
+    Typography
+} from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 type ProductItemProps = Pick<Product, 'id' | 'title' | 'price' | 'thumbnail'>
 
@@ -10,6 +26,22 @@ const ProductItem: FC<ProductItemProps> = ({ id, title, price, thumbnail }) => {
     const goToItemPage = () => {
         navigate(`${ProductsRoutes.AllProducts}/${id}`)
     }
+
+    const dispatch = useDispatch<AppDispatch>()
+    const handleAddItem = () => {
+        dispatch(addItemToCart({
+            id,
+            title,
+            price,
+            quantity: 1
+        }))
+    }
+
+    const cartItems = useSelector(selectCartItems)
+    const addedItemCheck = () => {
+        return Boolean(cartItems.find(item => item.id === id))
+    }
+
     return (
         <Card>
             <Box
@@ -43,9 +75,38 @@ const ProductItem: FC<ProductItemProps> = ({ id, title, price, thumbnail }) => {
                     <Typography>{`${price}$`}</Typography>
                 </Stack>
                 <CardActions>
-                    <Button variant='contained' onClick={goToItemPage}>
-                        Info
-                    </Button>
+                    <IconButton
+                        onClick={goToItemPage}
+                        sx={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '5px',
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                                backgroundColor: 'primary.main'
+                            }
+                        }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                    <IconButton
+                        sx={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '5px',
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                                backgroundColor: 'primary.main'
+                            },
+                            '&:disabled': {
+                                backgroundColor: 'error.main'
+                            }
+                        }}
+                        onClick={handleAddItem}
+                        disabled={addedItemCheck()}
+                    >
+                        <AddCircleIcon />
+                    </IconButton>
                 </CardActions>
             </CardContent>
         </Card>
